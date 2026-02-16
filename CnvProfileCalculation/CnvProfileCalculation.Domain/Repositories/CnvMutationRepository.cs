@@ -11,4 +11,10 @@ public class CnvMutationRepository(DomainDbContext context)
             (entry, cnv) => cnv)
             .ToArray();
     }
+
+    public IEnumerable<Unite.Data.Entities.Omics.Analysis.Dna.Cnv.Variant> GetCnvMutations()
+    {
+        //TODO: select all cnv-variants from the DB
+        throw new NotImplementedException();
+    }
 }
