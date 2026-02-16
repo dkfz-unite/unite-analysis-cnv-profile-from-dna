@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CnvProfileCalculation.App", "CnvProfileCalculation.App\CnvProfileCalculation.App.csproj", "{4D5A91E5-D1DB-4120-94C0-12A04025DA04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CnvProfileCalculation.Domain", "CnvProfileCalculation.Domain\CnvProfileCalculation.Domain.csproj", "{49E6F006-B8CD-48D5-B55B-46A83533EFF9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D5A91E5-D1DB-4120-94C0-12A04025DA04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D5A91E5-D1DB-4120-94C0-12A04025DA04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D5A91E5-D1DB-4120-94C0-12A04025DA04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5A91E5-D1DB-4120-94C0-12A04025DA04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49E6F006-B8CD-48D5-B55B-46A83533EFF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49E6F006-B8CD-48D5-B55B-46A83533EFF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49E6F006-B8CD-48D5-B55B-46A83533EFF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49E6F006-B8CD-48D5-B55B-46A83533EFF9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
