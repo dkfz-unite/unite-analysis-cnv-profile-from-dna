@@ -1,3 +1,23 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using CnvProfileCalculation;
+using CnvProfileCalculation.Domain.Model;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-Console.WriteLine("Hello, World!");
+var builder = Host.CreateApplicationBuilder(args);
+
+// Register services
+//builder.Services.AddSingleton<CnvMut, MyService>();
+builder.Services.AddTransient<App>();
+
+
+builder.Services.
+    AddOptions<Options>()
+    .Bind(builder.Configuration.GetSection("Options"));
+
+builder.Logging.AddConsole();
+
+using var host = builder.Build();
+
+var app = host.Services.GetRequiredService<App>();
+await app.RunAsync();
