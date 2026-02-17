@@ -1,3 +1,4 @@
+using CnvProfileCalculation.Domain.ConfigModel;
 using CnvProfileCalculation.Domain.Model;
 using Microsoft.Extensions.Options;
 using Unite.Data.Entities.Omics.Analysis.Dna.Cnv.Enums;
@@ -15,12 +16,15 @@ public class CnvProfileCalculationService(IOptions<Options> options)
         public IList<CnvVariant> Neutrals { get; set; }  = new List<CnvVariant>();
     }
     
-    public Analysis<CnvProfile> CalculateCnvProfile(Analysis<CnvVariant> cnvAnalysis)
+    public Task<Analysis<CnvProfile>> CalculateCnvProfile(Analysis<CnvVariant> cnvAnalysis)
     {
         if(!options.Value.Genomes.TryGetValue(cnvAnalysis.Genome, out var genomeOptions))
             throw new Exception($"Genome not found: {cnvAnalysis.Genome}");
 
-        var cnvProfileAnalysis = new Analysis<CnvProfile>();
+        var cnvProfileAnalysis = new Analysis<CnvProfile>
+        {
+            //TODO: fill the properties
+        };
         
         foreach (var chromosomePair in genomeOptions.Chromosomes)
         {
@@ -30,39 +34,88 @@ public class CnvProfileCalculationService(IOptions<Options> options)
             foreach (var cnvVariant in cnvs)
             {
                 var chromosomeArm = GetChromosomeArm(cnvVariant, chromosomePair.Value);
-                if (cnvVariant.CnvType == CnvType.Gain)
+                if (chromosomeArm.HasValue)
                 {
-                    aggregation[chromosomeArm].Gains.Add(cnvVariant);
+                    if (cnvVariant.CnvType == CnvType.Gain)
+                    {
+                        aggregation[chromosomeArm.Value].Gains.Add(cnvVariant);
+                    }
+                    else if (cnvVariant.CnvType == CnvType.Loss)
+                    {
+                        aggregation[chromosomeArm.Value].Losses.Add(cnvVariant);
+                    }
+                    else if (cnvVariant.CnvType == CnvType.Neutral)
+                    {
+                        aggregation[chromosomeArm.Value].Neutrals.Add(cnvVariant);
+                    }
                 }
-                else if (cnvVariant.CnvType == CnvType.Loss)
+                else
                 {
-                    aggregation[chromosomeArm].Losses.Add(cnvVariant);
-                }
-                else if (cnvVariant.CnvType == CnvType.Neutral)
-                {
-                    aggregation[chromosomeArm].Neutrals.Add(cnvVariant);
+                    //TODO: log failure to map CNV to chromosome arm
                 }
             }
 
             foreach (var cnvAggregationPair in aggregation)
             {
-                var cnvProfile = CalculateCnvProfile(chromosomePair.Key, cnvAggregationPair.Key, cnvAggregationPair.Value);
+                var chromosomeArmOptions = chromosomePair.Value.ChromosomeArms[cnvAggregationPair.Key];
+                
+                var cnvProfile = CalculateCnvProfile(chromosomePair.Key, 
+                    cnvAggregationPair.Key, 
+                    cnvAggregationPair.Value, 
+                    chromosomeArmOptions);
+                
                 cnvProfileAnalysis.Entries.Add(cnvProfile);
             }
         }
         
-        return cnvProfileAnalysis;
+        return Task.FromResult(cnvProfileAnalysis);
     }
 
-    private ChromosomeArm GetChromosomeArm(CnvVariant cnvVariant, ChromosomeOptions chromosomeOptions)
+    private ChromosomeArm? GetChromosomeArm(CnvVariant cnvVariant, ChromosomeOptions chromosomeOptions)
     {
-        //TODO: implement
-        throw new NotImplementedException();
+        foreach (var chromosomeArmPair in chromosomeOptions.ChromosomeArms)
+        {
+            var chromosomeArmOptions = chromosomeArmPair.Value;
+            if(cnvVariant.Start >= chromosomeArmOptions.Start && cnvVariant.End <= chromosomeArmOptions.End)
+                return chromosomeArmPair.Key;
+        }
+
+        return null;
     }
 
-    private CnvProfile CalculateCnvProfile(Chromosome chromosome, ChromosomeArm chromosomeArm, CnvAggregation aggregation)
+    private CnvProfile CalculateCnvProfile(Chromosome chromosome, 
+        ChromosomeArm chromosomeArm, 
+        CnvAggregation aggregation, 
+        ChromosomeArmOptions chromosomeArmOptions)
     {
-        //TODO: implement
-        throw new NotImplementedException();
+        float armLength = chromosomeArmOptions.End - chromosomeArmOptions.Start;
+
+        uint totalGain = CalculateTotalLength(aggregation.Gains);
+        uint totalLoss = CalculateTotalLength(aggregation.Losses);
+        uint totalNeutral = CalculateTotalLength(aggregation.Neutrals);
+
+        var cnvProfile = new CnvProfile
+        {
+            Chromosome =  chromosome,
+            ChromosomeArm = chromosomeArm,
+            Gain = totalGain / armLength,
+            Loss = totalLoss / armLength,
+            Neutral = totalNeutral / armLength
+            
+        };
+
+        return cnvProfile;
+    }
+
+    private static uint CalculateTotalLength(IList<CnvVariant> variants)
+    {
+        uint totalLength = 0;
+        foreach (var cnvVariant in variants)
+        {
+            uint length = cnvVariant.End - cnvVariant.Start;
+            totalLength += length;
+        }
+        
+        return totalLength;
     }
 }
