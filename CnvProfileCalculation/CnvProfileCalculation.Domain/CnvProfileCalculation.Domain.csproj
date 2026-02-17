@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Unite.Data" Version="12.5.2" />
-      <PackageReference Include="Unite.Data.Context" Version="12.5.2" />
+      <PackageReference Include="Unite.Data" Version="12.5.3" />
+      <PackageReference Include="Unite.Data.Context" Version="12.5.3" />
       <PackageReference Include="Unite.Essentials.Tsv" Version="4.2.0" />
     </ItemGroup>
 

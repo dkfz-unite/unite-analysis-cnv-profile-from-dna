@@ -11,5 +11,5 @@ public class Analysis<TEntry>
     public string Genome { get; set; }
     public string Reader { get; set; }
     public string Path { get; set; }
-    public IList<TEntry> Entries { get; set; }
+    public IList<TEntry> Entries { get; set; } = new List<TEntry>();
 }

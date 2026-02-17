@@ -28,7 +28,7 @@ public class CnvProfileCalculationService(IOptions<Options> options)
         
         foreach (var chromosomePair in genomeOptions.Chromosomes)
         {
-            var aggregation = new Dictionary<ChromosomeArm, CnvAggregation>();
+            var aggregations = new Dictionary<ChromosomeArm, CnvAggregation>();
             var cnvs = cnvAnalysis.Entries.Where(x => x.Chromosome == chromosomePair.Key).ToArray();
             
             foreach (var cnvVariant in cnvs)
@@ -36,17 +36,23 @@ public class CnvProfileCalculationService(IOptions<Options> options)
                 var chromosomeArm = GetChromosomeArm(cnvVariant, chromosomePair.Value);
                 if (chromosomeArm.HasValue)
                 {
+                    if (!aggregations.TryGetValue(chromosomeArm.Value, out var aggregation))
+                    {
+                        aggregation = new CnvAggregation();
+                        aggregations[chromosomeArm.Value] = aggregation;
+                    }
+                    
                     if (cnvVariant.CnvType == CnvType.Gain)
                     {
-                        aggregation[chromosomeArm.Value].Gains.Add(cnvVariant);
+                        aggregation.Gains.Add(cnvVariant);
                     }
                     else if (cnvVariant.CnvType == CnvType.Loss)
                     {
-                        aggregation[chromosomeArm.Value].Losses.Add(cnvVariant);
+                        aggregation.Losses.Add(cnvVariant);
                     }
                     else if (cnvVariant.CnvType == CnvType.Neutral)
                     {
-                        aggregation[chromosomeArm.Value].Neutrals.Add(cnvVariant);
+                        aggregation.Neutrals.Add(cnvVariant);
                     }
                 }
                 else
@@ -55,7 +61,7 @@ public class CnvProfileCalculationService(IOptions<Options> options)
                 }
             }
 
-            foreach (var cnvAggregationPair in aggregation)
+            foreach (var cnvAggregationPair in aggregations)
             {
                 var chromosomeArmOptions = chromosomePair.Value.ChromosomeArms[cnvAggregationPair.Key];
                 
