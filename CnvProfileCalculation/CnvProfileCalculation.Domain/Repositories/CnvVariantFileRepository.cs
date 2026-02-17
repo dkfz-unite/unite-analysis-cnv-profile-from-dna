@@ -47,7 +47,7 @@ public class CnvVariantFileRepository(IOptions<Options> options): ICnvVariantRep
         return analyses;
     }
 
-    private async Task<IEnumerable<CnvVariant>> ReadCnvVariants(CnvAnalysis cnvAnalysis)
+    private async Task<IList<CnvVariant>> ReadCnvVariants(CnvAnalysis cnvAnalysis)
     {
         var variants = new List<CnvVariant>();
 

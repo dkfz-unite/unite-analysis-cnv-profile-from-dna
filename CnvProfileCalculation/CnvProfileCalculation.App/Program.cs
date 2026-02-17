@@ -11,7 +11,6 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddSingleton<ICnvVariantRepository, CnvVariantFileRepository>();
 builder.Services.AddTransient<App>();
 
-
 builder.Services.
     AddOptions<Options>()
     .Bind(builder.Configuration.GetSection("Options"));
