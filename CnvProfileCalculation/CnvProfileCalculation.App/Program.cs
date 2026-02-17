@@ -1,5 +1,6 @@
 ﻿using CnvProfileCalculation;
 using CnvProfileCalculation.Domain.Model;
+using CnvProfileCalculation.Domain.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.Logging;
 var builder = Host.CreateApplicationBuilder(args);
 
 // Register services
-//builder.Services.AddSingleton<CnvMut, MyService>();
+builder.Services.AddSingleton<ICnvVariantRepository, CnvVariantFileRepository>();
 builder.Services.AddTransient<App>();
 
 
