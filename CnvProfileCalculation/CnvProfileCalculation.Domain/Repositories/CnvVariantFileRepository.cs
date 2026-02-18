@@ -1,8 +1,9 @@
 using CnvProfileCalculation.Domain.Model;
+using CnvProfileCalculation.Domain.Model.Tsv;
 using Microsoft.Extensions.Options;
 using Unite.Essentials.Extensions;
 using Unite.Essentials.Tsv;
-using Options = CnvProfileCalculation.Domain.Model.Options;
+using Options = CnvProfileCalculation.Domain.ConfigModel.Options;
 
 namespace CnvProfileCalculation.Domain.Repositories;
 

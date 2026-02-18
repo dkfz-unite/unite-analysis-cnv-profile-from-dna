@@ -2,7 +2,7 @@ using Unite.Essentials.Tsv.Attributes;
 
 namespace CnvProfileCalculation.Domain.Model.Tsv;
 
-public class CnvAnalysis
+public class CnvProfileAnalysis
 {
     [Column("donor_id")]
     public string Donor { get; set; }
@@ -24,12 +24,6 @@ public class CnvAnalysis
     
     [Column("genome")]
     public string Genome { get; set; }
-    
-    [Column("purity")]
-    public float Purity { get; set; }
-    
-    [Column("ploidy")]
-    public float Ploidy { get; set; }
     
     [Column("reader")]
     public string Reader { get; set; }

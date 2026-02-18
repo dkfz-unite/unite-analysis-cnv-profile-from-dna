@@ -2,7 +2,7 @@ using Unite.Data.Entities.Omics.Analysis.Dna.Cnv.Enums;
 using Unite.Data.Entities.Omics.Enums;
 using Unite.Essentials.Tsv.Attributes;
 
-namespace CnvProfileCalculation.Domain.Model;
+namespace CnvProfileCalculation.Domain.Model.Tsv;
 
 public class CnvEntry
 {

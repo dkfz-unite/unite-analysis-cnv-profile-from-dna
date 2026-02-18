@@ -1,4 +1,6 @@
-﻿using CnvProfileCalculation;
+﻿using System.Globalization;
+using CnvProfileCalculation;
+using CnvProfileCalculation.Domain.ConfigModel;
 using CnvProfileCalculation.Domain.Model;
 using CnvProfileCalculation.Domain.Repositories;
 using CnvProfileCalculation.Domain.Services;
@@ -10,6 +12,7 @@ var builder = Host.CreateApplicationBuilder(args);
 
 // Register services
 builder.Services.AddSingleton<ICnvVariantRepository, CnvVariantFileRepository>();
+builder.Services.AddSingleton<ICnvProfileRepository, CnvProfileFileRepository>();
 builder.Services.AddSingleton<CnvProfileCalculationService>();
 builder.Services.AddTransient<App>();
 

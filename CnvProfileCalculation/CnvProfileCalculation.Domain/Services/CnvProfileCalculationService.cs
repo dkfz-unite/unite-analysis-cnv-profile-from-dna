@@ -1,14 +1,15 @@
 using System.Collections.Immutable;
 using CnvProfileCalculation.Domain.ConfigModel;
 using CnvProfileCalculation.Domain.Model;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Unite.Data.Entities.Omics.Analysis.Dna.Cnv.Enums;
 using Unite.Data.Entities.Omics.Enums;
-using Options = CnvProfileCalculation.Domain.Model.Options;
+using Options = CnvProfileCalculation.Domain.ConfigModel.Options;
 
 namespace CnvProfileCalculation.Domain.Services;
 
-public class CnvProfileCalculationService(IOptions<Options> options)
+public class CnvProfileCalculationService(IOptions<Options> options, ILogger<CnvProfileCalculationService> logger)
 {
     class CnvAggregation
     {
@@ -24,7 +25,15 @@ public class CnvProfileCalculationService(IOptions<Options> options)
 
         var cnvProfileAnalysis = new Analysis<CnvProfile>
         {
-            //TODO: fill the properties
+            Genome = cnvAnalysis.Genome,
+            AnalysisType = cnvAnalysis.AnalysisType,
+            DonorKey =  cnvAnalysis.DonorKey,
+            MatchedSpecimen =  cnvAnalysis.MatchedSpecimen,
+            SpecimenKey = cnvAnalysis.SpecimenKey,
+            SpecimenType =  cnvAnalysis.SpecimenType,
+            MatchedSpecimenType =  cnvAnalysis.MatchedSpecimenType,
+            Path =  cnvAnalysis.Path,
+            Reader = cnvAnalysis.Reader,
         };
         
         foreach (var chromosomePair in genomeOptions.Chromosomes)
@@ -58,7 +67,7 @@ public class CnvProfileCalculationService(IOptions<Options> options)
                 }
                 else
                 {
-                    //TODO: log failure to map CNV to chromosome arm
+                    logger.LogError($"Cannot find chromosome arm: cnv({cnvVariant.Start}-{cnvVariant.End}), chromosome({chromosomePair.Key})");
                 }
             }
 
