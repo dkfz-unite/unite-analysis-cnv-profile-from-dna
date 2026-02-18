@@ -6,7 +6,7 @@ namespace CnvProfileCalculation.Domain.Model;
 public class CnvVariant
 {
     public Chromosome Chromosome { get; set; }
-    public uint Start { get; set; }
-    public uint End { get; set; }
+    public uint Start { get; set; } = 0;
+    public uint End { get; set; } = 0;
     public CnvType CnvType { get; set; }
 }

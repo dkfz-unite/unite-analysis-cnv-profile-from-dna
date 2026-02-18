@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using CnvProfileCalculation.Domain.ConfigModel;
 using CnvProfileCalculation.Domain.Model;
 using Microsoft.Extensions.Options;
@@ -96,9 +97,11 @@ public class CnvProfileCalculationService(IOptions<Options> options)
     {
         float armLength = chromosomeArmOptions.End - chromosomeArmOptions.Start;
 
-        uint totalGain = CalculateTotalLength(aggregation.Gains);
-        uint totalLoss = CalculateTotalLength(aggregation.Losses);
-        uint totalNeutral = CalculateTotalLength(aggregation.Neutrals);
+        var gains = aggregation.Gains.OrderBy(x => x.Start);
+        
+        uint totalGain = CalculateTotalLength(MergeVariants(aggregation.Gains));
+        uint totalLoss = CalculateTotalLength(MergeVariants(aggregation.Losses));
+        uint totalNeutral = CalculateTotalLength(MergeVariants(aggregation.Neutrals));
 
         var cnvProfile = new CnvProfile
         {
@@ -111,6 +114,41 @@ public class CnvProfileCalculationService(IOptions<Options> options)
         };
 
         return cnvProfile;
+    }
+
+    private static IList<CnvVariant> MergeVariants(IList<CnvVariant> variants)
+    {
+        var sortedVariants = variants.OrderBy(x => x.Start).ToList();
+        var mergedVariants = new List<CnvVariant>();
+
+        CnvVariant currentRange = null;
+        foreach (var variant in sortedVariants)
+        {
+            if (currentRange == null)
+            {
+                currentRange = new CnvVariant
+                {
+                    Start = variant.Start,
+                    End = variant.End,
+                    Chromosome = variant.Chromosome, 
+                    CnvType = variant.CnvType
+                };
+            }
+
+            if (variant.Start < currentRange.End)
+            {
+                if(variant.End > currentRange.End)
+                    currentRange.End = variant.End;
+            }
+            else
+            {
+                mergedVariants.Add(currentRange);
+                currentRange = null;
+            }
+
+        }
+
+        return mergedVariants;
     }
 
     private static uint CalculateTotalLength(IList<CnvVariant> variants)
