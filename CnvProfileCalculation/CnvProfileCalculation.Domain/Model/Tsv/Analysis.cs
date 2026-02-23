@@ -2,7 +2,7 @@ using Unite.Essentials.Tsv.Attributes;
 
 namespace CnvProfileCalculation.Domain.Model.Tsv;
 
-public class CnvAnalysis
+public class Analysis
 {
     [Column("donor_id")]
     public string Donor { get; set; }

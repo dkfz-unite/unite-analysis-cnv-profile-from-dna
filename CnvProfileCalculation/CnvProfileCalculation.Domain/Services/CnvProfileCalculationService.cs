@@ -34,6 +34,8 @@ public class CnvProfileCalculationService(IOptions<Options> options, ILogger<Cnv
             MatchedSpecimenType =  cnvAnalysis.MatchedSpecimenType,
             Path =  cnvAnalysis.Path,
             Reader = cnvAnalysis.Reader,
+            Ploidy = cnvAnalysis.Ploidy,
+            Purity =  cnvAnalysis.Purity
         };
         
         foreach (var chromosomePair in genomeOptions.Chromosomes)

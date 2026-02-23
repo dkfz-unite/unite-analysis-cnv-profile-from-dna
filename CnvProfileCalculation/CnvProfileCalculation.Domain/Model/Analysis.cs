@@ -9,6 +9,8 @@ public class Analysis<TEntry>
     public string MatchedSpecimenType { get; set; }
     public string AnalysisType { get; set; }
     public string Genome { get; set; }
+    public float Purity { get; set; }
+    public float Ploidy { get; set; }
     public string Reader { get; set; }
     public string Path { get; set; }
     public IList<TEntry> Entries { get; set; } = new List<TEntry>();

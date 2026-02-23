@@ -21,7 +21,7 @@ public class CnvVariantFileRepository(IOptions<Options> options): ICnvVariantRep
         if(string.IsNullOrEmpty(cnvAnalysisFileContent))
             throw new Exception("Invalid CNV Analysis file");
         
-        IEnumerable<CnvAnalysis> cnvAnalyses = TsvReader.Read<CnvAnalysis>(cnvAnalysisFileContent)
+        IEnumerable<Analysis> cnvAnalyses = TsvReader.Read<Analysis>(cnvAnalysisFileContent)
             .ToArrayOrNull();
 
         List<Analysis<CnvVariant>> analyses = new List<Analysis<CnvVariant>>();
@@ -48,11 +48,11 @@ public class CnvVariantFileRepository(IOptions<Options> options): ICnvVariantRep
         return analyses;
     }
 
-    private async Task<IList<CnvVariant>> ReadCnvVariants(CnvAnalysis cnvAnalysis)
+    private async Task<IList<CnvVariant>> ReadCnvVariants(Analysis analysis)
     {
         var variants = new List<CnvVariant>();
 
-        var path = Path.Combine(options.Value.DataPath, cnvAnalysis.Path);
+        var path = Path.Combine(options.Value.DataPath, analysis.Path);
         if(!File.Exists(path))
             throw new Exception($"CNV data file not found: {path}");
         

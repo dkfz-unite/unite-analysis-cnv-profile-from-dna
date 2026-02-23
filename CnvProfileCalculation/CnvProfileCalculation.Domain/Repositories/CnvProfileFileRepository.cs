@@ -17,7 +17,7 @@ public class CnvProfileFileRepository(IOptions<CnvProfileCalculation.Domain.Conf
             File.Delete(analysesPath);
         }
 
-        List<CnvProfileAnalysis> analyses = new List<CnvProfileAnalysis>();
+        List<Model.Tsv.Analysis> analyses = new List<Model.Tsv.Analysis>();
         
         foreach (var cnvProfileAnalysis in cnvProfileAnalyses)
         {
@@ -33,7 +33,7 @@ public class CnvProfileFileRepository(IOptions<CnvProfileCalculation.Domain.Conf
                 File.Delete(cnvProfilePath);
             }
             
-            var analysis = new CnvProfileAnalysis
+            var analysis = new Model.Tsv.Analysis
             {
                 AnalysisType =  cnvProfileAnalysis.AnalysisType,
                 Donor =  cnvProfileAnalysis.DonorKey,
@@ -43,6 +43,8 @@ public class CnvProfileFileRepository(IOptions<CnvProfileCalculation.Domain.Conf
                 MatchedSpecimenType =   cnvProfileAnalysis.MatchedSpecimenType,
                 Reader =  cnvProfileAnalysis.Reader,
                 Specimen =  cnvProfileAnalysis.SpecimenKey,
+                Ploidy = cnvProfileAnalysis.Ploidy,
+                Purity =   cnvProfileAnalysis.Purity,
                 Path =  cnvProfilePath
             };
             

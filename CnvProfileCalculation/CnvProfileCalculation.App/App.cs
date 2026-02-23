@@ -26,11 +26,6 @@ public sealed class App(IOptions<Options> options,
         {
             var profiles = await cnvProfileCalculationService.CalculateCnvProfile(cnvAnalysis);
             analyses.Add(profiles);
-            
-            /*foreach (var profilesEntry in profiles.Entries)
-            {
-                logger.LogInformation($"CNV Profile: ch {profilesEntry.Chromosome}, cha {profilesEntry.ChromosomeArm}, g {profilesEntry.Gain}, l {profilesEntry.Loss}, n {profilesEntry.Neutral}");
-            }*/
         }
         
         cnvProfileRepository.StoreCnvProfileAnalyses(analyses);
